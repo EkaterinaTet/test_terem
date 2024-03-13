@@ -10,58 +10,55 @@ html {
 h1 {
   text-align: center;
 }
+.hidden_title {
+  display: none;
+}
+
 .blocks {
   display: flex;
   flex-direction: column;
   gap: 5px;
   height: 100vh;
 }
+.blocks > div,
+.block_middle > div {
+  flex: 1;
+  gap: 5px;
+}
 .block_top {
   background-color: rgb(95, 95, 116);
-  width: 100%;
-  border: 1px solid #000;
-  flex: 1;
 }
 .block_middle {
   display: flex;
-  gap: 5px;
   flex-direction: row;
-  flex: 1;
 }
-.block_elem1,
-.block_elem3 {
+.block_top,
+.blocks > div > div:not(.block_elem2) {
   border: 1px solid #000;
-  flex: 1;
 }
 .block_elem1 {
   background-color: rgb(65, 127, 197);
 }
 .block_elem2 {
   border: 1px dashed #000;
-  flex: 1;
   background-color: rgb(145, 194, 201);
+}
+.block_elem2-change {
+  order: -1;
 }
 .block_elem3 {
   background-color: rgba(197, 197, 252, 0.849);
 }
-.block_middle div {
-  width: 100%;
-}
 .block_bottom {
-  flex: 1;
   display: grid;
-  gap: 5px;
   grid-template-columns: 1fr 2fr;
 }
 .block_bottom div {
   background-color: rgb(142, 142, 230);
-  width: 100%;
-  border: 1px solid #000;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 .popup {
   display: flex;
   align-items: center;
@@ -71,6 +68,9 @@ h1 {
   background-color: rgb(33 10 10 / 50%);
   position: fixed;
   top: 0px;
+}
+.hidden_popup {
+  display: none;
 }
 .popup_content {
   width: 50%;

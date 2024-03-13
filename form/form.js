@@ -1,80 +1,42 @@
 const form = document.getElementById("form");
-const select_container = document.querySelector(".select_container");
+const showJson = document.querySelector(".json");
+const inputs = document.querySelectorAll("input");
+const selects = document.querySelectorAll("select");
 
-for (let i = 0; i < 5; i++) {
-  const select = document.createElement("select");
-  select.name = `Select ${i + 1}`;
+let formData;
 
-  for (let j = 1; j <= 5; j++) {
-    const option = document.createElement("option");
-    option.text = j;
-    option.value = j;
-    select.add(option);
-  }
+const createJSON = () => {
+  const data = Object.fromEntries(formData);
+  const jsonData = JSON.stringify(data, null, 2);
+  showJson.innerText = jsonData;
+};
 
-  select_container.appendChild(select);
-}
+const getRequest = async () => {
+  try {
+    const queryString = new URLSearchParams(formData).toString();
+    const url = `handler.php?${queryString}`;
+    const response = await fetch(url);
 
-for (let i = 0; i < 2; i++) {
-  const input = document.createElement("input");
-  input.type = "text";
-  input.name = `Input ${i + 1}`;
-  input.placeholder = "Введите текст";
-  input.classList.add("input");
-
-  form.appendChild(input);
-}
-
-const submitButton = document.createElement("button");
-submitButton.type = "submit";
-submitButton.textContent = "Отправить";
-submitButton.classList.add("button_submit");
-
-form.appendChild(submitButton);
-
-document.body.appendChild(form);
-
-function createJSON() {
-  const formData = new FormData(form);
-  const jsonData = {};
-
-  for (let [key, value] of formData.entries()) {
-    if (jsonData[key]) {
-      if (!Array.isArray(jsonData[key])) {
-        jsonData[key] = [jsonData[key]];
-      }
-      jsonData[key].push(value);
-    } else {
-      jsonData[key] = value;
+    if (!response.ok) {
+      throw new Error("Не удалось выполнить запрос");
     }
+    const data = await response.json();
+    alert("Данные получены", data);
+  } catch (error) {
+    console.error("Ошибка при выполнении запроса:", error);
   }
-  return JSON.stringify(jsonData, null, 2);
-}
+};
 
-const showJson = document.createElement("div");
-showJson.classList = "json";
-form.insertAdjacentElement("afterend", showJson);
+const clearFormFields = () => {
+  inputs.forEach((input) => (input.value = ""));
+  selects.forEach((select) => (select.selectedIndex = 0));
+};
 
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  showJson.innerText = createJSON();
-
-  const formData = new FormData(this);
-  const queryString = new URLSearchParams(formData).toString();
-  const url = `handler.php?${queryString}`;
-
-  fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      alert("Данные получены");
-    })
-    .catch((error) => {
-      console.error("Ошибка:", error);
-    });
+  formData = new FormData(form);
+  createJSON();
+  getRequest();
+  clearFormFields();
 });
