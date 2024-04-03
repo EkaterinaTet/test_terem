@@ -8,13 +8,13 @@ const popupClose = document.querySelector(".popup_close");
 const popup = document.querySelector(".popup");
 
 const showTitle = () => {
-  title.classList.toggle("hidden_title");
+  title.classList.toggle("hidden");
 };
 const changeBlocks = () => {
   elem.classList.toggle("block_elem2-change");
 };
 const closePopup = () => {
-  popup.classList.add("hidden_popup");
+  popup.classList.add("hidden");
 };
 
 buttonOne.addEventListener("click", showTitle);
